@@ -53,7 +53,7 @@ func (n *NomadLog) ToJSON() (string, error) {
 	return string(result[:]), nil
 }
 
-//FollowedTask a container for a followed task log process
+// FollowedTask a container for a followed task log process
 type FollowedTask struct {
 	Alloc       *nomadApi.Allocation
 	TaskGroup   string
@@ -67,7 +67,7 @@ type FollowedTask struct {
 	outState    StreamState
 }
 
-//NewFollowedTask creates a new followed task
+// NewFollowedTask creates a new followed task
 func NewFollowedTask(alloc *nomadApi.Allocation, taskGroup string, task *nomadApi.Task, nomad NomadConfig, quit chan struct{}, output chan string, logger Logger) *FollowedTask {
 	logTemplate := createLogTemplate(alloc, task)
 	return &FollowedTask{
@@ -163,7 +163,7 @@ func CalculateOffset(state StreamState, file string, size int64) int64 {
 	return calculatedOffset
 }
 
-//Start starts following a task for an allocation
+// Start starts following a task for an allocation
 func (ft *FollowedTask) Start(save *SavedTask) {
 	//config := nomadApi.DefaultConfig()
 	//config.WaitTime = 5 * time.Minute
@@ -345,25 +345,30 @@ func getServiceTagMap(service nomadApi.Service) map[string]string {
 // processFrame takes a frame and determines if each line is JSON, or a single or multi-line log.
 //
 // Requirements of operation:
-// - JSON logs must be on a single line to be properly parsed aka newlines escaped if included
-// - String logs must contain a datetime as close to the beginning of the line as possible
-// - Multi-line string logs should not contain datetimes near the beginning of the string
-//   to be grouped properly
+//   - JSON logs must be on a single line to be properly parsed aka newlines escaped if included
+//   - String logs must contain a datetime as close to the beginning of the line as possible
+//   - Multi-line string logs should not contain datetimes near the beginning of the string
+//     to be grouped properly
 //
 // Pseudo code for multi-line string logs:
 // if has a timestamp
-//   if multiline buf is empty
-//     add to multiline buf + continue
-//   else
-//     flush multiline buf as json
-//     add to multiline buf + continue
+//
+//	if multiline buf is empty
+//	  add to multiline buf + continue
+//	else
+//	  flush multiline buf as json
+//	  add to multiline buf + continue
+//
 // else
-//   if multiline buf is empty
-//     add frag header + line to multiline buf + continue
-//   else
-//     add line to multiline buf + continue
+//
+//	if multiline buf is empty
+//	  add frag header + line to multiline buf + continue
+//	else
+//	  add line to multiline buf + continue
+//
 // Note: last timestamp and multiline buffer must be passed to and received from the calling
-//       function to properly mark timestamps and group logs between calls.
+//
+//	function to properly mark timestamps and group logs between calls.
 func (ft *FollowedTask) processFrame(frame *nomadApi.StreamFrame, streamState StreamState) ([]string, StreamState) {
 	logContext := "FollowedTask.processFrame"
 	messages := strings.Split(string(frame.Data[:]), "\n")
@@ -470,7 +475,7 @@ func getJSONMessage(s string) map[string]interface{} {
 }
 
 func createFragmentHeader(timestamp string) string {
-	return fmt.Sprintf("%s Log Fragment Header")
+	return fmt.Sprintf("%s Log Fragment Header", timestamp)
 }
 
 func wrapJsonLog(logTmpl NomadLog, line string) NomadLog {

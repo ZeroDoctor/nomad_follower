@@ -86,17 +86,11 @@ func main() {
 	outChan := af.Start(ALLOC_REFRESH_TICK, saveFile)
 
 	if af != nil {
-		for {
-			select {
-			case message, ok := <-outChan:
-				if ok {
-					fileLogger.Println(message)
-				} else {
-					logger.Info("main", "Allocation Follower fatal error, exiting.")
-					return
-				}
-			}
+		for message := range outChan {
+			fileLogger.Println(message)
 		}
+
+		logger.Info("main", "Allocation Follower fatal error, exiting.")
 	}
 }
 
