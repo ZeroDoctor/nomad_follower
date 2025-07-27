@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"time"
 
@@ -29,7 +28,7 @@ type SavedTask struct {
 	StdErrOffsets map[string]int64 `json:"stderr_offsets"`
 }
 
-//AllocationFollower a container for the list of followed allocations
+// AllocationFollower a container for the list of followed allocations
 type AllocationFollower struct {
 	Allocations map[string]*FollowedAllocation
 	Nomad       NomadConfig
@@ -41,7 +40,7 @@ type AllocationFollower struct {
 	logTag      string
 }
 
-//NewAllocationFollower Creates a new allocation follower
+// NewAllocationFollower Creates a new allocation follower
 func NewAllocationFollower(nomad NomadConfig, logger Logger, logTag string) (a *AllocationFollower, e error) {
 	return &AllocationFollower{
 		Allocations: make(map[string]*FollowedAllocation),
@@ -74,7 +73,7 @@ func (a *AllocationFollower) SetNodeID() error {
 	return err
 }
 
-//Start registers and de registers allocation followers
+// Start registers and de registers allocation followers
 func (a *AllocationFollower) Start(duration time.Duration, savePath string) <-chan string {
 	logContext := "AllocationFollower.Start"
 	a.Ticker = time.NewTicker(duration)
@@ -130,7 +129,7 @@ func (a *AllocationFollower) Start(duration time.Duration, savePath string) <-ch
 	return a.OutChan
 }
 
-//Stop stops all followed allocations and exits
+// Stop stops all followed allocations and exits
 func (a *AllocationFollower) Stop() {
 	a.Quit <- true
 
@@ -175,7 +174,7 @@ func (a *AllocationFollower) createSavePoint(path string) {
 		)
 		return
 	}
-	err = ioutil.WriteFile(path, data, 0644)
+	err = os.WriteFile(path, data, 0644)
 	if err != nil {
 		a.log.Errorf(
 			logContext,
