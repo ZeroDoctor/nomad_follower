@@ -1,4 +1,4 @@
-FROM golang:1.16-alpine AS builder
+FROM docker.io/library/golang:1.24.1-alpine AS builder
 ADD . /build
 RUN cd /build && go install -mod=mod
 
