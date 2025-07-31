@@ -6,7 +6,7 @@ import (
 	nomadApi "github.com/hashicorp/nomad/api"
 )
 
-//FollowedAllocation a container for a followed allocations log process
+// FollowedAllocation a container for a followed allocations log process
 type FollowedAllocation struct {
 	Alloc      *nomadApi.Allocation
 	Nomad      NomadConfig
@@ -17,7 +17,7 @@ type FollowedAllocation struct {
 	logTag     string
 }
 
-//NewFollowedAllocation creates a new followed allocation
+// NewFollowedAllocation creates a new followed allocation
 func NewFollowedAllocation(alloc *nomadApi.Allocation, nomad NomadConfig, outChan chan string, logger Logger, logTag string) *FollowedAllocation {
 	return &FollowedAllocation{
 		Alloc:      alloc,
@@ -30,7 +30,7 @@ func NewFollowedAllocation(alloc *nomadApi.Allocation, nomad NomadConfig, outCha
 	}
 }
 
-//Start starts following an allocation
+// Start starts following an allocation
 func (f *FollowedAllocation) Start(save *SavedAlloc) {
 	f.log.Debugf(
 		"FollowedAllocation.Start",
@@ -62,7 +62,7 @@ func (f *FollowedAllocation) Start(save *SavedAlloc) {
 	}
 }
 
-//Stop stops tailing all allocation tasks
+// Stop stops tailing all allocation tasks
 func (f *FollowedAllocation) Stop() {
 	f.log.Debugf(
 		"FollowedAllocation.Stop",

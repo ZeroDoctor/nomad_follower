@@ -1,2 +1,5 @@
 nomad_follower
-nomad.log
+bin/
+
+nomad-follower.json
+*.log
